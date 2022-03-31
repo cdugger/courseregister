@@ -21,20 +21,19 @@ def main():
         soup = BeautifulSoup(f, "html.parser")
 
     last_names = get_names("last-names.txt")
-    d = defaultdict(list)
+    course_catalog = []
     subjects = soup.find_all("li")
     for subject in subjects:
         text = subject.a.getText()  # ex: Aerospace and Mechanical Engineering (A ME)
-        key = text[0]
         subject_data = {
             "subject": text[: text.find("(") - 1],
             "code": text[text.find("(") + 1 : text.find(")")].replace(" ", ""),
             "courses": get_courses(subject.a["href"], last_names),
         }
-        d[key].append(subject_data)
+        course_catalog.append(subject_data)
 
     with open("out.json", "w") as f:
-        f.write(json.dumps(d, indent=4))
+        f.write(json.dumps(course_catalog, indent=4))
 
 
 """
@@ -121,11 +120,11 @@ def create_instructor(last_names):
 
 
 """
-Seminar: 196, 296, 396, 496, 596, 696, 796
-Ind. Study: 199, 299, 399, 499, 599, 699, 799
-Colloquium: 195, 295, 395, 495, 595, 695, 795
-Workshop: 197, 297, 397, 497, 597, 697, 797
-Practicum: 194, 294, 394, 494, 594, 694, 794
+Seminar: 96
+Ind. Study: 99
+Colloquium: 95
+Workshop: 97
+Practicum: 94
 
 Course component can by found by reading the last two digits of a course number
 """
@@ -219,6 +218,4 @@ def clean_text(s):
 
 
 if __name__ == "__main__":
-    for i in range(100):
-        print(create_meeting_date())
-    # main()
+    main()
