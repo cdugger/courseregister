@@ -1,8 +1,7 @@
 import json
 import re
-from collections import defaultdict
 from string import ascii_uppercase
-from random import shuffle, choice, choices
+from random import choice
 import requests
 from bs4 import BeautifulSoup
 
@@ -22,18 +21,24 @@ def main():
 
     last_names = get_names("last-names.txt")
     course_catalog = []
+    meta = []
     subjects = soup.find_all("li")
     for subject in subjects:
-        text = subject.a.getText()  # ex: Aerospace and Mechanical Engineering (A ME)
+        text = subject.a.getText()  # ex: Computer Science (CSC)
+        subject_name = text[: text.find("(") - 1] # Computer Science
+        subject_code = text[text.find("(") + 1 : text.find(")")].replace(" ", "").strip() # CSC
         subject_data = {
-            "subject": text[: text.find("(") - 1],
-            "code": text[text.find("(") + 1 : text.find(")")].replace(" ", ""),
+            "subject": subject_name,
+            "code": subject_code,
             "courses": get_courses(subject.a["href"], last_names),
         }
         course_catalog.append(subject_data)
-
+        meta.append({"subject": subject_name, "code": subject_code})
     with open("out.json", "w") as f:
         f.write(json.dumps(course_catalog, indent=4))
+
+    with open("meta.json", "w") as f:
+        f.write(json.dumps(meta, indent=4))
 
 
 """
@@ -63,13 +68,11 @@ def get_courses(href, last_names):
         soup = BeautifulSoup(r.content, "html.parser")
         r.close()
         course_info = soup.find_all("p")
-        # times = list(range(8,22)) # 8am-9pm
-        # days = ["M-Wed", "Tu-Th"]
-        # schedule = shuffle([(i,j) for i in days for j in times])
         for p in course_info:
             if p.b and p.b.a:
                 desc = p.getText()
                 number = p.b.a.getText().replace(".", "")
+                time_info = create_meeting_dates()
                 result.append(
                     {
                         "title": clean_text(
@@ -78,6 +81,9 @@ def get_courses(href, last_names):
                         "number": number,
                         "description": desc,
                         "instructor": create_instructor(last_names),
+                        "days": time_info["days"],
+                        "timeStart": time_info["timeStart"],
+                        "timeEnd": time_info["timeEnd"], 
                         "component": get_component(number),
                         "attributes": get_attributes(number, desc),
                         "units": get_units(desc),
@@ -101,16 +107,17 @@ Option 2: TueThu
 Option 3: MonTueWedThuFri
 """
 def create_meeting_dates():
-    days = ["MonWed", "TueThu", "MonTueWedThuFri"]
-    times = list(range(8,21)) # 8am-9pm
     option = choice([1,2,3])
-    choice()
+    start_hour = choice(list(range(8,21)))
+    rand_start_time = f'{start_hour}:{choice(["00","30"])}' # 8am-9pm
+    end = choice([60, 90]) # an hour or an hour and 30 mins
+    end_time = f'{(start_hour%25)+1}:00' if end == 60 else f'{(start_hour%25)+1}:30'
     if option == 1:
-        return {"days": "MonWed", "time": str(choice(times))}
+        return {"days": "MonWed", "timeStart": rand_start_time, "timeEnd": end_time}
     elif option == 2:
-        return {"days": "TueThu", "time": str(choice(times))}
+        return {"days": "TueThu", "timeStart": rand_start_time, "timeEnd": end_time}
     elif option == 3:
-        return {"days": "MonTueWedThuFri", "time": str(choice(times))}
+        return {"days": "MonTueWedThuFri", "timeStart": rand_start_time, "timeEnd": end_time}
 
 """
 
@@ -172,6 +179,8 @@ def get_units(course_description):
     units = re.findall("(?<=\()[0-9]-?[0-9]?", course_description)
     if units:
         return units[0]
+    else:
+        return choice(range(1,4))
 
 
 """

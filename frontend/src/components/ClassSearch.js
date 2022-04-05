@@ -1,17 +1,43 @@
+import { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import SearchItem from './SearchItem';
 import courses from '../data/courses';
+import { subject_data, attributes, components, units } from '../data/course_filters';
 
 
 const ClassSearch = () => {
+    const [courseList, setCourseList] = useState();
+    const [subject, setSubject] = useState("");
+    const [code, setCode] = useState("");
 
-    const filterBySubject = (subjectName, courses) => {
-        return courses.filter(x => {
-            x.subject === subjectName;
-        })
+    const filterBySubject = (e) => {
+        let subject_find = subject_data.find((x) => {
+            return x.subject === e.target.value;
+        });
+
+        if(subject_find) {
+            let courseFilter = courses.filter(c => {
+                return c.subject === subject_find.subject;
+            })
+            
+            if(courseFilter.length > 0) {
+                setSubject(subject_find.subject);
+                setCode(subject_find.code);
+                setCourseList(courseFilter[0].courses);
+                console.log(courseFilter[0].courses);
+            }
+        }
     }
+
+    useEffect(() => {
+        // let t = courses.filter(c => {
+        //     return c.subject === "Accounting";
+        // })
+        // setCourseList(t[0].courses);
+    })
+
 
     return (
         <Modal.Dialog size="xl" id="class-search">
@@ -20,27 +46,41 @@ const ClassSearch = () => {
             </Modal.Header>
             <Modal.Body>
                 <Form.Floating className="mb-3">
-                    <Form.Control id="subject-datalist" list="subject-list" />
+                    <Form.Select className="is-invalid" id="subject-datalist" onChange={filterBySubject} required>
+                        <option></option>
+                        { subject_data.map(x => (
+                            <option key={x.code} value={x.subject}>{x.subject + " (" + x.code + ")"}</option>
+                        ))}
+                    </Form.Select>
                     <label htmlFor="subject-datalist">Subject</label>
-                    <datalist id="subject-list">
-                        <option value="Computer Science (CSC)" />
-                        <option value="Classics (CLAS)" />
-                        <option value="Accounting (ACCT)" />
-                    </datalist>
+                    <div className="invalid-feedback">Required Field</div>
                 </Form.Floating>
                 <Form.Floating className="mb-3">
-                    <Form.Control id="course-attributes" />
+                <Form.Select className="course-attributes" aria-label="Course attribute search">
+                    <option></option>
+                    {attributes.map(x => (
+                        <option key={x}>{x}</option>
+                    ))}
+                    </Form.Select>
                     <label htmlFor="course-attributes">Course Attributes</label>
                 </Form.Floating>
                 <Form.Floating className="mb-3">
                     <Form.Select className="course-component" aria-label="Course component search">
-                        <option selected> </option>
-                        <option value="1"> </option>
-                        <option value="2">Colloquium</option>
-                        <option value="3">Discussion</option>
-                        <option value="4">Independent Study</option>
+                        <option></option>
+                        {components.map(x => (
+                            <option key={x}>{x}</option>
+                        ))}
                     </Form.Select>
                     <label htmlFor="course-component">Course Component</label>
+                </Form.Floating>
+                <Form.Floating className="mb-3">
+                    <Form.Select className="units-select" aria-label="Units select">
+                        <option selected></option>
+                        {units.map(x => (
+                            <option key={x}>{x}</option>
+                        ))}
+                    </Form.Select>
+                    <label htmlFor="course-component">Units</label>
                 </Form.Floating>
                 <Form.Floating>
                     <Form.Check inline label="Mon" name="days" type="checkbox" id="checkbox1" />
@@ -49,11 +89,9 @@ const ClassSearch = () => {
                     <Form.Check inline label="Thu" name="days" type="checkbox" id="checkbox4" />
                     <Form.Check inline label="Fri" name="days" type="checkbox" id="checkbox5" />
                 </Form.Floating>
-                {courses.map(s => (
-                    s.courses.map(course => (
-                        <SearchItem courseInfo={course} subject={s.subject} code={s.code} />
-                    ))
-                ))}
+                {courseList ? courseList.map(s=> (
+                    <SearchItem courseInfo={s} subject={subject} code={code} />
+                )) : <></>}
             </Modal.Body>
             <Modal.Footer>
 
