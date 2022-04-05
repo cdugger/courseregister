@@ -9,34 +9,34 @@ const SearchItem = (props) => {
         <ListGroup>
             <ListGroup.Item className="m-3">
                 <Row>
-                    <Col><h5>{props.course}</h5></Col>
+                    <Col><h5>{props.courseInfo.title}</h5></Col>
                 </Row>
                 <Row>
                     <Col>
                         <Row>CRN</Row>
-                        <Row>{props.crn}</Row>
+                        <Row>{2001}</Row>
                     </Col>
                     <Col>
                         <Row>Meeting Times</Row>
-                        <Row>{props.times}</Row>
+                        <Row>10:00 AM 10:30 AM</Row>
                     </Col>
                     <Col>
                         <Row>Days</Row>
-                        <Row>{props.days}</Row>
+                        <Row>MonWed</Row>
                     </Col>
                     <Col>
                         <Row>Units</Row>
-                        <Row>{props.units}</Row>
+                        <Row>{props.courseInfo.units ? props.courseInfo.units: 'TBA'}</Row>
                     </Col>
                     <Col>
                         <Row>Instructor</Row>
-                        <Row>{props.instructor}</Row>
+                        <Row>{props.courseInfo.instructor}</Row>
                     </Col>
                     <Col>
-                        <Row>Prereqs</Row>
+                        <Row>Prerequisites</Row>
                         <Row>
                             <Col>
-                                {props.prereqs.map((c) => (
+                                {props.courseInfo.prerequisites.map((c) => (
                                     <Badge bg="warning" text="dark">
                                         {c}
                                     </Badge>

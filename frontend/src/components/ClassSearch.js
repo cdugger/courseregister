@@ -1,9 +1,17 @@
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import SearchItem from './SearchItem';
+import courses from '../data/courses';
 
 
 const ClassSearch = () => {
+
+    const filterBySubject = (subjectName, courses) => {
+        return courses.filter(x => {
+            x.subject === subjectName;
+        })
+    }
 
     return (
         <Modal.Dialog size="xl" id="class-search">
@@ -41,10 +49,16 @@ const ClassSearch = () => {
                     <Form.Check inline label="Thu" name="days" type="checkbox" id="checkbox4" />
                     <Form.Check inline label="Fri" name="days" type="checkbox" id="checkbox5" />
                 </Form.Floating>
+                {courses.map(s => (
+                    s.courses.map(course => (
+                        <SearchItem courseInfo={course} subject={s.subject} code={s.code} />
+                    ))
+                ))}
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary">Close</Button>
-                <Button variant="primary">Save changes</Button>
+
+                {/* <Button variant="secondary">Close</Button>
+                <Button variant="primary">Save changes</Button> */}
             </Modal.Footer>
         </Modal.Dialog>
     )
