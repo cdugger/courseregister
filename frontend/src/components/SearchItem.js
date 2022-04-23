@@ -3,21 +3,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
+import {formatTime} from '../util/util';
 
 const SearchItem = (props) => {
-
-    /*
-        time -> str: 'HH:MM'
-    */
-    const formatTime = (time) => {
-        let hour = Number.parseInt(time.substring(0, time.indexOf(':')));
-        let minute = time.substring(time.indexOf(':') + 1);
-        if(hour > 12) {
-            return `${hour-12}:${minute}PM`;
-        } else {
-            return `${hour}:${minute}AM`
-        }
-    }
 
     return (
         <ListGroup>
@@ -60,7 +48,7 @@ const SearchItem = (props) => {
                     </Col>
                     <Col>
                         <Button variant="secondary">Details</Button>{' '}
-                        <Button variant="success">Add</Button>{' '}
+                        <Button variant="success" onClick={props.onCourseAdd}>Add</Button>{' '}
                     </Col>
                 </Row>
             </ListGroup.Item>

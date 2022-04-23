@@ -10,7 +10,6 @@ const DateHeader = (props) => {
     let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const dates = () => {
         let result = [];
-        console.log(props)
         let curr_date = new Date(props.start_date.valueOf());
         for (let i = 0; i < days.length; i++) {
             result.push(curr_date.getDate());
@@ -43,7 +42,7 @@ const TimeSlot = (props) => {
     );
 }
 
-const WeekView = () => {
+const WeekView = (props) => {
     const [week, setWeek] = useState(new Date());
 
     useEffect(() => {
@@ -54,11 +53,11 @@ const WeekView = () => {
 
     function time_row_headings() {
         let result = [];
-        for (let i = 0; i < 24; i++) {
-            let abbreviation = "pm" ? i > 11 : "am";
-            let heading = [<Col>{(i % 12 + 1) + abbreviation}</Col>];
-            for (let j = 0; j < 7; j++) {
-                let events = check_event(j, i + 1);
+        for (let time = 0; time < 24; time++) {
+            let abbreviation = "pm" ? time > 11 : "am";
+            let heading = [<Col>{(time % 12 + 1) + abbreviation}</Col>];
+            for (let day = 0; day < 7; day++) {
+                let events = checkCourses(day, time + 1);
                 heading.push(<TimeSlot event={events} />)
             }
             result.push(heading);
@@ -84,7 +83,7 @@ const WeekView = () => {
         return months[week.getMonth()];
     }
 
-    function check_event(day, time) {
+    function checkCourses(day, time) {
         let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
         let events = [
             { "name": "CSC 127B", "days": "MonWed", "time": "8-9" },
@@ -92,19 +91,19 @@ const WeekView = () => {
             { "name": "ACCT 102", "days": "MonTueWedThuFri", "time": "11-12" }
         ];
 
-        for (let e of events) {
+        for (let course of props.courses) {
             let day_nums = [];
-            for (let i = 0; i < e.days.length - 2; i += 3) {
-                let a = e.days.substring(i, i + 3);
+            for (let i = 0; i < course.days.length - 2; i += 3) {
+                let a = course.days.substring(i, i + 3);
                 let b = days.indexOf(a);
                 day_nums.push(b);
             }
 
             const re = /^([0-9]{1,2})-([0-9]{1,2})$/;
-            let matches = e.time.match(re);
+            let matches = course.time.match(re);
             if ((Number.parseInt(matches[1]) === time)) {
                 if (day_nums.indexOf(day) !== -1) {
-                    return e;
+                    return course;
                 }
             }
         }

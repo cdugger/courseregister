@@ -7,7 +7,7 @@ import courses from '../data/courses';
 import { subject_data, attributes, components, units } from '../data/course_filters';
 
 
-const ClassSearch = () => {
+const ClassSearch = (props) => {
     const [courseList, setCourseList] = useState();
     const [subject, setSubject] = useState("");
     const [code, setCode] = useState("");
@@ -26,21 +26,17 @@ const ClassSearch = () => {
                 setSubject(subject_find.subject);
                 setCode(subject_find.code);
                 setCourseList(courseFilter[0].courses);
-                console.log(courseFilter[0].courses);
             }
         }
     }
 
     useEffect(() => {
-        // let t = courses.filter(c => {
-        //     return c.subject === "Accounting";
-        // })
-        // setCourseList(t[0].courses);
+  
     })
 
 
     return (
-        <Modal.Dialog size="xl" id="class-search">
+        <Modal show={props.show} onHide={props.hide} size="xl" id="class-search">
             <Modal.Header closeButton>
                 <Modal.Title>Add/Search Course</Modal.Title>
             </Modal.Header>
@@ -89,8 +85,9 @@ const ClassSearch = () => {
                     <Form.Check inline label="Thu" name="days" type="checkbox" id="checkbox4" />
                     <Form.Check inline label="Fri" name="days" type="checkbox" id="checkbox5" />
                 </Form.Floating>
+                <p>Courses found: {courseList ? courseList.length : 0}</p>
                 {courseList ? courseList.map(s=> (
-                    <SearchItem courseInfo={s} subject={subject} code={code} />
+                    <SearchItem courseInfo={s} subject={subject} code={code} onCourseAdd={() => props.onCourseAdd(s)}/>
                 )) : <></>}
             </Modal.Body>
             <Modal.Footer>
@@ -98,7 +95,7 @@ const ClassSearch = () => {
                 {/* <Button variant="secondary">Close</Button>
                 <Button variant="primary">Save changes</Button> */}
             </Modal.Footer>
-        </Modal.Dialog>
+        </Modal>
     )
 }
 
