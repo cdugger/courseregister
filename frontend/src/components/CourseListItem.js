@@ -7,8 +7,8 @@ const CourseListItem = (props) => {
     return (
         <ListGroup>
             <ListGroup.Item>
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">{props.courseInfo.code} {props.courseInfo.number} - {props.courseInfo.title}</h5>
+                <div className="d-flex w-100 justify-content-between">
+                    <h5 className="mb-1">{props.courseInfo.code} {props.courseInfo.number} - {props.courseInfo.title}</h5>
                     <small>3 days ago</small>
                 </div>
                 <div>{props.courseInfo.title}</div>

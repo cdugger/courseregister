@@ -7,7 +7,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Container from 'react-bootstrap/Container';
 import ClassSearch from './ClassSearch';
 import CourseList from './CourseList';
-import WeekView from './WeekView';
+import WeekView from './WeekView/WeekView';
 
 const Home = () => {
     const [show, setShow] = useState(false);
@@ -77,9 +77,11 @@ const Home = () => {
             </Row>
             {view === 'list' ? 
             <CourseList courses={addedCourses} />
-            : <></>}
+            : <WeekView courses={addedCourses} />}
+            {
+                show ? <ClassSearch show={show} hide={hide} onCourseAdd={addCourse}/> : <></>
+            }
             
-            <ClassSearch show={show} hide={hide} onCourseAdd={addCourse}/>
         </Container>
     );
 }

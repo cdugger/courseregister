@@ -5,8 +5,8 @@ const CourseList = (props) => {
 
     return (
         <Row>
-            {props.courses ? props.courses.map(c => (
-                <CourseListItem courseInfo={c} />
+            {props.courses ? props.courses.map((c, i) => (
+                <CourseListItem key={i} courseInfo={c} />
             ))
             : 
             <></>

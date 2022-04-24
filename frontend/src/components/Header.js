@@ -8,7 +8,7 @@ const Header = () => {
     return (
         <Navbar className="py-4">
             <Container fluid>
-                <Navbar.Brand className="fs-2" href="#"><span class="text-warning">University</span><span className="text-light">Access</span></Navbar.Brand>
+                <Navbar.Brand className="fs-2" href="#"><span className="text-warning">University</span><span className="text-light">Access</span></Navbar.Brand>
                 <Nav className="me-auto">
                     <Nav.Link href="#">Home</Nav.Link>
                 </Nav>
