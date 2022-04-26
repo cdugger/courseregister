@@ -6,10 +6,10 @@ const CourseList = (props) => {
     return (
         <Row>
             {props.courses ? props.courses.map((c, i) => (
-                <CourseListItem key={i} courseInfo={c} />
+                <CourseListItem key={i} courseInfo={c} id={i} onDrop={props.onDrop} />
             ))
-            : 
-            <></>
+                :
+                <></>
             }
         </Row>
     );

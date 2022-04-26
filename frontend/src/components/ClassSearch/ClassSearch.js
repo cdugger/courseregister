@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Spinner from 'react-bootstrap/Spinner';
 import Form from 'react-bootstrap/Form';
@@ -7,8 +7,9 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import ClassSearchAddModal from './ClassSearchAddModal';
 import SearchItem from './SearchItem';
-import courses from '../data/courses';
-import { subject_data, attributes, components } from '../data/course_filters';
+import MoveToTop from './MoveToTop';
+import courses from '../../data/courses';
+import { subject_data, attributes, components } from '../../data/course_filters';
 
 
 const ClassSearch = (props) => {
@@ -67,9 +68,13 @@ const ClassSearch = (props) => {
     }
 
     const handleCourseAdd = (courseInfo) => {
-        setShowAddModal(true);
-        props.onCourseAdd(courseInfo);
         setSelectedCourseInfo(courseInfo);
+        setShowAddModal(true);
+    }
+
+    const addCourse = () => {
+        props.onCourseAdd(selectedCourseInfo);
+        setShowAddModal(false);
     }
 
     useEffect(() => {
@@ -132,7 +137,8 @@ const ClassSearch = (props) => {
 
     return (
         <>
-            <ClassSearchAddModal show={showAddModal} hide={() => setShowAddModal(false)} course={selectedCourseInfo} />
+            {/* <MoveToTop /> */}
+            <ClassSearchAddModal show={showAddModal} hide={() => setShowAddModal(false)} course={selectedCourseInfo} onConfirm={addCourse}/>
             <Modal show={props.show} onHide={props.hide} size="xl" id="class-search">
                 <Modal.Header closeButton>
                     <Modal.Title>Add/Search Course</Modal.Title>
@@ -195,7 +201,7 @@ const ClassSearch = (props) => {
                 <Modal.Body>
                     <p>Courses found: {filteredCourseList ? filteredCourseList.length : 0}</p>
                     {(filteredCourseList && !loading) ? filteredCourseList.map((course, i) => (
-                        <SearchItem key={i} courseInfo={course} subject={subject} code={code} onCourseAdd={() => handleCourseAdd(course)} />
+                        <SearchItem key={i} courseInfo={course} subject={subject} code={code} onCourseAdd={handleCourseAdd} />
                     )) :
                         <Row>
                             <Col md={{ span: 6, offset: 5 }}>

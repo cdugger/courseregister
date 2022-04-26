@@ -6,6 +6,10 @@ import { formatTime } from '../util/util';
 
 const CourseListItem = (props) => {
 
+    const handleDrop = () => {
+        props.onDrop(props.courseInfo, props.id);
+    }
+
     return (
         <ListGroup className="border m-3">
             <ListGroup.Item>
@@ -22,7 +26,7 @@ const CourseListItem = (props) => {
             </ListGroup>
             <Row className="d-grid justify-content-end">
                 <Col>
-                    <Button className="m-2" variant="danger">Drop</Button>
+                    <Button className="m-2" variant="danger" onClick={handleDrop}>Drop</Button>
                     <Button variant="primary">Register</Button>
                 </Col>
             </Row>

@@ -5,21 +5,45 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Container from 'react-bootstrap/Container';
-import ClassSearch from './ClassSearch';
-import CourseList from './CourseList';
+import ClassSearch from './ClassSearch/ClassSearch';
+import DropModal from './DropModal';
+import CourseList from '../CourseList/CourseList';
 import WeekView from './WeekView/WeekView';
 
 const Home = () => {
-    const [show, setShow] = useState(false);
+    const [showCourseAdd, setShowCourseAdd] = useState(false);
+    const [showDrop, setShowDrop] = useState(false);
     const [view, setView] = useState('list');
     const [addedCourses, setAddedCourses] = useState([]);
+    const [droppedCourse, setDroppedCourse] = useState();
     const listIcon = "bi-card-list";
     const calendarIcon = "bi-calendar";
 
-    const hide = () => {
-        setShow(false);
+    const hideCourseAdd = () => {
+        setShowCourseAdd(false);
     }
 
+    const hideDropModal = () => {
+        setShowDrop(false);
+    }
+
+    const dropCourse = () => {
+        let temp = [...addedCourses];
+        console.log('idx is ' + droppedCourse.id);
+        temp.splice(droppedCourse.id, 1);
+        setAddedCourses(temp);
+
+        setShowDrop(false);
+        console.log('Dropping course:');
+        console.log(droppedCourse);
+    }
+
+    const showDropCourseModal = (course, idx) => {
+        setShowDrop(true);
+        setDroppedCourse({course: course, id: idx});
+        console.log(course);
+        console.log(idx);
+    }
     const toggleScheduleView = () => {
         setView(view === 'list' ? 'calendar' : 'list');
     }
@@ -32,11 +56,16 @@ const Home = () => {
 
     return (
         <Container>
+            {showDrop ?
+                <DropModal show={showDrop} hide={hideDropModal} course={droppedCourse.course} onConfirm={dropCourse}/>
+                : <></>
+            }
+
             <h2 className="display-5 py-5">Schedule Builder</h2>
             <hr />
             <Row className="w-75 px-3">
                 <Row md={5} className="m-2">
-                    <Button variant="primary" onClick={() => setShow(true)}>
+                    <Button variant="primary" onClick={() => setShowCourseAdd(true)}>
                         Search/Add Course
                     </Button>
                 </Row>
@@ -75,16 +104,16 @@ const Home = () => {
                     </Col>
                 </Row>
             </Row>
-            {view === 'list' ? 
-                addedCourses.length > 0 ? 
-                <CourseList courses={addedCourses} /> 
-                :
-                <p>No classes added</p>
-            : <WeekView courses={addedCourses} />}
+            {view === 'list' ?
+                addedCourses.length > 0 ?
+                    <CourseList courses={addedCourses} onDrop={showDropCourseModal} />
+                    :
+                    <p>No classes added</p>
+                : <WeekView courses={addedCourses} />}
             {
-                show ? <ClassSearch show={show} hide={hide} onCourseAdd={addCourse}/> : <></>
+                showCourseAdd ? <ClassSearch show={showCourseAdd} hide={hideCourseAdd} onCourseAdd={addCourse} /> : <></>
             }
-            
+
         </Container>
     );
 }

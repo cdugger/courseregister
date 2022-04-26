@@ -3,9 +3,14 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
-import { formatTime } from '../util/util';
+import { formatTime } from '../../util/util';
 
 const SearchItem = (props) => {
+
+    const handleCourseAdd = () => {
+        console.log(props.courseInfo);
+        props.onCourseAdd(props.courseInfo);
+    }
 
     return (
         <ListGroup>
@@ -40,8 +45,8 @@ const SearchItem = (props) => {
                         <Row>
                             <Col>
                                 {props.courseInfo.prerequisites.length > 0 ?
-                                    props.courseInfo.prerequisites.map((c) => (
-                                        <Badge bg="warning" text="dark">
+                                    props.courseInfo.prerequisites.map((c, i) => (
+                                        <Badge key={i} bg="warning" text="dark">
                                             {c}
                                         </Badge>
                                     ))
@@ -54,7 +59,7 @@ const SearchItem = (props) => {
                     <Col>
                         <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                             <Button variant="secondary">Details</Button>{' '}
-                            <Button variant="success" onClick={props.onCourseAdd}>Add</Button>{' '}
+                            <Button variant="success" onClick={handleCourseAdd}>Add</Button>{' '}
                         </div>
                     </Col>
                 </Row>

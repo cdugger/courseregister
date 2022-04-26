@@ -18,10 +18,10 @@ const ClassSearchAddModal = (props) => {
             <Modal.Body>
                 <p>Would you like to add <strong>{props.course.title}</strong> to your schedule?</p></Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={''}>
+                <Button variant="secondary" onClick={props.hide}>
                     No
                 </Button>
-                <Button variant="primary" onClick={''}>
+                <Button variant="primary" onClick={props.onConfirm}>
                     Yes
                 </Button>
             </Modal.Footer>
