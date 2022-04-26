@@ -18,6 +18,14 @@ const Home = () => {
     const [droppedCourse, setDroppedCourse] = useState();
     const listIcon = "bi-card-list";
     const calendarIcon = "bi-calendar";
+    // ----- schedule stuff
+    // {name: "schedule 1", courses: [{},{}]}
+    const [schedule, setSchedule] = useState([{name: "Main Schedule", courses: []}]);
+    const [scheduleEditModalShow, setScheduleEditModalShow] = useState(false);
+
+    const showEditScheduleModal = () => {
+        setScheduleEditModalShow(true);
+    }
 
     const hideCourseAdd = () => {
         setShowCourseAdd(false);
@@ -29,20 +37,14 @@ const Home = () => {
 
     const dropCourse = () => {
         let temp = [...addedCourses];
-        console.log('idx is ' + droppedCourse.id);
         temp.splice(droppedCourse.id, 1);
         setAddedCourses(temp);
-
         setShowDrop(false);
-        console.log('Dropping course:');
-        console.log(droppedCourse);
     }
 
     const showDropCourseModal = (course, idx) => {
         setShowDrop(true);
-        setDroppedCourse({course: course, id: idx});
-        console.log(course);
-        console.log(idx);
+        setDroppedCourse({ course: course, id: idx });
     }
     const toggleScheduleView = () => {
         setView(view === 'list' ? 'calendar' : 'list');
@@ -57,7 +59,7 @@ const Home = () => {
     return (
         <Container>
             {showDrop ?
-                <DropModal show={showDrop} hide={hideDropModal} course={droppedCourse.course} onConfirm={dropCourse}/>
+                <DropModal show={showDrop} hide={hideDropModal} course={droppedCourse.course} onConfirm={dropCourse} />
                 : <></>
             }
 
@@ -72,11 +74,16 @@ const Home = () => {
                 <Row>
                     <Col>
                         <Form.Select aria-label="Default select example">
-                            <option selected>Schedule 1</option>
-                            <option value="1">Schedule 2</option>
-                            <option value="2">Schedule 3</option>
-                            <option value="3">Schedule 4</option>
+                            {
+                                schedule.map((s, i) => (
+                                    <option key={i}>{s.name}</option>
+                                ))
+                            }
+                            
                         </Form.Select>
+                    </Col>
+                    <Col>
+                        <i class="bi bi-pencil-fill fs-3" onClick={showEditScheduleModal}></i>
                     </Col>
                     <Col>
                         <div className="d-grid gap-1 d-md-block">

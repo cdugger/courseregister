@@ -7,7 +7,6 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import ClassSearchAddModal from './ClassSearchAddModal';
 import SearchItem from './SearchItem';
-import MoveToTop from './MoveToTop';
 import courses from '../../data/courses';
 import { subject_data, attributes, components } from '../../data/course_filters';
 
@@ -160,7 +159,7 @@ const ClassSearch = (props) => {
                     {/*
                         Attribute Select
                     */}
-                    <Form.Floating className="mb-3 w-50">
+                    {/* <Form.Floating className="mb-3 w-50">
                         <Form.Select className="course-attributes" aria-label="Course attribute search">
                             <option></option>
                             {attributes.map(x => (
@@ -168,11 +167,11 @@ const ClassSearch = (props) => {
                             ))}
                         </Form.Select>
                         <label htmlFor="course-attributes">Course Attributes</label>
-                    </Form.Floating>
+                    </Form.Floating> */}
                     {/*
                         Component Select
                     */}
-                    <Form.Floating className="mb-3 w-50">
+                    {/* <Form.Floating className="mb-3 w-50">
                         <Form.Select className="course-component" aria-label="Course component search">
                             <option></option>
                             {components.map((x, i) => (
@@ -180,7 +179,7 @@ const ClassSearch = (props) => {
                             ))}
                         </Form.Select>
                         <label htmlFor="course-component">Course Component</label>
-                    </Form.Floating>
+                    </Form.Floating> */}
                     {/*
                         Unit Slider
                     */}
