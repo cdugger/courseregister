@@ -2,7 +2,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
-import { formatTime } from '../util/util';
+import { formatTime } from '../../util/util';
 
 const CourseListItem = (props) => {
 

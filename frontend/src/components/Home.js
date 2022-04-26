@@ -6,8 +6,11 @@ import Form from 'react-bootstrap/Form';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Container from 'react-bootstrap/Container';
 import ClassSearch from './ClassSearch/ClassSearch';
-import DropModal from './DropModal';
-import CourseList from '../CourseList/CourseList';
+import DropModal from './Modals/DropModal';
+import ScheduleEditModal from './Modals/ScheduleEditModal';
+import NewScheduleModal from './Modals/NewScheduleModal';
+import DeleteScheduleModal from './Modals/DeleteScheduleModal';
+import CourseList from './CourseList/CourseList';
 import WeekView from './WeekView/WeekView';
 
 const Home = () => {
@@ -15,24 +18,52 @@ const Home = () => {
     const [showDrop, setShowDrop] = useState(false);
     const [view, setView] = useState('list');
     const [addedCourses, setAddedCourses] = useState([]);
-    const [droppedCourse, setDroppedCourse] = useState();
+    const [droppedCourse, setDroppedCourse] = useState({});
     const listIcon = "bi-card-list";
     const calendarIcon = "bi-calendar";
     // ----- schedule stuff
     // {name: "schedule 1", courses: [{},{}]}
     const [schedule, setSchedule] = useState([{name: "Main Schedule", courses: []}]);
     const [scheduleEditModalShow, setScheduleEditModalShow] = useState(false);
+    const [deleteScheduleModalShow, setDeleteScheduleModalShow] = useState(false);
+    const [newScheduleModalShow, setNewScheduleModalShow] = useState(false);
+    const [selectedSchedule, setSelectedSchedule] = useState(0);
 
     const showEditScheduleModal = () => {
         setScheduleEditModalShow(true);
     }
 
-    const hideCourseAdd = () => {
-        setShowCourseAdd(false);
+    const showNewScheduleModal = () => {
+        setNewScheduleModalShow(true);
     }
 
-    const hideDropModal = () => {
-        setShowDrop(false);
+    const handleDeleteScheduleModal = () => {
+        setDeleteScheduleModalShow(true);
+    }
+
+    const addNewSchedule = (name) => {
+        let temp = [...schedule];
+        temp.push({name: name, courses: []});
+        setSchedule(temp);
+        setSelectedSchedule(selectedSchedule + 1);
+    }
+
+    const deleteSchedule = () => {
+        let temp = [...schedule];
+        temp.splice(selectedSchedule, 1);
+        setSchedule(temp);
+        setSelectedSchedule(selectedSchedule - 1);
+    }
+
+    const editScheduleName = (name) => {
+        console.log(`Editing schedule ${schedule[selectedSchedule].name} to '${name}'`);
+        let temp = [...schedule];
+        temp[selectedSchedule].name = name;
+        setSchedule(temp);
+    }
+
+    const handleSelectSchedule = (e, i) => {
+        setSelectedSchedule(i);
     }
 
     const dropCourse = () => {
@@ -44,7 +75,7 @@ const Home = () => {
 
     const showDropCourseModal = (course, idx) => {
         setShowDrop(true);
-        setDroppedCourse({ course: course, id: idx });
+        setDroppedCourse({ name: course, id: idx });
     }
     const toggleScheduleView = () => {
         setView(view === 'list' ? 'calendar' : 'list');
@@ -58,11 +89,12 @@ const Home = () => {
 
     return (
         <Container>
-            {showDrop ?
-                <DropModal show={showDrop} hide={hideDropModal} course={droppedCourse.course} onConfirm={dropCourse} />
-                : <></>
-            }
-
+            
+            <DeleteScheduleModal show={deleteScheduleModalShow} hide={() => setDeleteScheduleModalShow(false)} scheduleName={schedule[selectedSchedule].name} onConfirm={deleteSchedule} />
+            <NewScheduleModal show={newScheduleModalShow} hide={() => setNewScheduleModalShow(false)} onConfirm={addNewSchedule} />
+            <ScheduleEditModal show={scheduleEditModalShow} hide={() => setScheduleEditModalShow(false)} scheduleName={schedule[selectedSchedule].name} onConfirm={editScheduleName} /> 
+            <DropModal show={showDrop} hide={() => setShowDrop(false)} course={droppedCourse} onConfirm={dropCourse} />
+          
             <h2 className="display-5 py-5">Schedule Builder</h2>
             <hr />
             <Row className="w-75 px-3">
@@ -76,19 +108,19 @@ const Home = () => {
                         <Form.Select aria-label="Default select example">
                             {
                                 schedule.map((s, i) => (
-                                    <option key={i}>{s.name}</option>
+                                    <option key={i} onClick={() => handleSelectSchedule(s.name, i)} selected={selectedSchedule === i}>{s.name}</option>
                                 ))
                             }
                             
                         </Form.Select>
                     </Col>
                     <Col>
-                        <i class="bi bi-pencil-fill fs-3" onClick={showEditScheduleModal}></i>
+                        <i className="bi bi-pencil-fill fs-3" onClick={showEditScheduleModal}></i>
                     </Col>
                     <Col>
                         <div className="d-grid gap-1 d-md-block">
-                            <Button variant="info">New Schedule</Button>
-                            <Button variant="danger">Delete Schedule</Button>
+                            <Button variant="info" onClick={showNewScheduleModal}>New Schedule</Button>
+                            <Button variant="danger" onClick={handleDeleteScheduleModal}>Delete Schedule</Button>
                         </div>
                     </Col>
                     <Col className="text-end">
@@ -118,7 +150,7 @@ const Home = () => {
                     <p>No classes added</p>
                 : <WeekView courses={addedCourses} />}
             {
-                showCourseAdd ? <ClassSearch show={showCourseAdd} hide={hideCourseAdd} onCourseAdd={addCourse} /> : <></>
+                showCourseAdd ? <ClassSearch show={showCourseAdd} hide={() => setShowCourseAdd(false)} onCourseAdd={addCourse} /> : <></>
             }
 
         </Container>
