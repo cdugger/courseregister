@@ -35,7 +35,7 @@ const Home = () => {
             <h2 className="display-5 py-5">Schedule Builder</h2>
             <hr />
             <Row className="w-75 px-3">
-                <Row md={5}>
+                <Row md={5} className="m-2">
                     <Button variant="primary" onClick={() => setShow(true)}>
                         Search/Add Course
                     </Button>
@@ -76,7 +76,10 @@ const Home = () => {
                 </Row>
             </Row>
             {view === 'list' ? 
-            <CourseList courses={addedCourses} />
+                addedCourses.length > 0 ? 
+                <CourseList courses={addedCourses} /> 
+                :
+                <p>No classes added</p>
             : <WeekView courses={addedCourses} />}
             {
                 show ? <ClassSearch show={show} hide={hide} onCourseAdd={addCourse}/> : <></>

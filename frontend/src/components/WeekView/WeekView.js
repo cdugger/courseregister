@@ -1,4 +1,5 @@
 import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import '../../css/WeekView.css';
@@ -58,9 +59,16 @@ const WeekView = (props) => {
 
     return (
         <Container>
-            <Button onClick={prevWeek}>{"<-"}</Button>
-            <h1>{getMonth() + " " + week.getFullYear()}</h1>
-            <Button onClick={nextWeek}>{"->"}</Button>
+            <Row className="text-white" style={{"backgroundColor": "#212121", "opacity": ".85"}}>
+                <Col className="d-flex justify-content-end">
+                    <Button className="m-1" variant="outline-info" size="lg" onClick={prevWeek}><i className="bi bi-caret-left"></i></Button>
+                    <Button className="m-1" variant="outline-info" size="lg" onClick={nextWeek}><i className="bi bi-caret-right"></i></Button>
+                </Col>
+                <Col md={7}>
+                    <h1 className="display-5">{getMonth() + " " + week.getFullYear()}</h1>
+                </Col>
+            </Row>
+
 
             <DayRow start_date={week} />
             <TimeRows />

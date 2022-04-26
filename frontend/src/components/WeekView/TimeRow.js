@@ -3,7 +3,7 @@ import TimeSlot from './TimeSlot';
 
 const TimeRow = (props) => {
 
-    const abbreviation = "pm" ? props.time >= 12 : "am";
+    const abbreviation = props.time >= 12  ? "pm" : "am";
     const dayAbbrevs = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
     function getEventOnDay(targetDay) {
@@ -21,7 +21,7 @@ const TimeRow = (props) => {
 
     return (
         <>
-            <Col>{(props.time % 13) + abbreviation}</Col>
+            <Col className="mt-4" md={1}><p >{(props.time % 13) + " " + abbreviation}</p></Col>
             {
                 dayAbbrevs.map((day, i) => (
                     <TimeSlot key={i} event={getEventOnDay(i)} />
@@ -30,19 +30,5 @@ const TimeRow = (props) => {
         </>
     );
 }
-// function time_row_headings() {
-//     let result = [];
-//     for (let time = 1; time <= 24; time++) {
-//         let abbreviation = "pm" ? time >= 12 : "am";
-//         let heading = [<Col>{((time % 13)) + abbreviation}</Col>];
-//         for (let day = 0; day < 7; day++) {
-//             let event = checkCourses(day, time);
-//             heading.push(<TimeSlot event={event} />)
-//         }
-//         result.push(heading);
-//     }
-
-//     return result;
-// }
 
 export default TimeRow;

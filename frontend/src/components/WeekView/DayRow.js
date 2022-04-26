@@ -16,9 +16,9 @@ const DayRow = (props) => {
 
     return (
         <Row>
-            <Col></Col>
+            <Col md={1}></Col>
             {dates().map((d, i) => (
-                <Col key={i} style={{ border: '1px solid' }}>{d + ' ' + days[i]}</Col>
+                <Col key={i} className="fs-5 border"><p><strong>{d + " "}</strong>{days[i]}</p></Col>
             ))}
         </Row>
 
