@@ -33,6 +33,11 @@ const Home = () => {
     const [newScheduleModalShow, setNewScheduleModalShow] = useState(false);
     const [selectedSchedule, setSelectedSchedule] = useState(0);
 
+    const handleSearchHide = () => {
+        setShowCourseAdd(false);
+        setStatusMessage("");
+    }
+
     const showEditScheduleModal = () => {
         setScheduleEditModalShow(true);
     }
@@ -200,7 +205,7 @@ const Home = () => {
 
                     : <WeekView courses={schedule[selectedSchedule].courses} />}
                 {
-                    showCourseAdd ? <ClassSearch message={statusMessage} show={showCourseAdd} hide={() => setShowCourseAdd(false)} onCourseAdd={addCourse} /> : <></>
+                    showCourseAdd ? <ClassSearch message={statusMessage} show={showCourseAdd} hide={handleSearchHide} onCourseAdd={addCourse} /> : <></>
                 }
             </Container>
         </Container>
