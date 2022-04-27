@@ -21,7 +21,7 @@ const TimeRow = (props) => {
 
     return (
         <>
-            <Col className="mt-4" md={1}><p >{(props.time % 13) + " " + abbreviation}</p></Col>
+            <Col className="mt-4" md={1}><p >{((props.time-1) % 12) + 1}{abbreviation}</p></Col>
             {
                 dayAbbrevs.map((day, i) => (
                     <TimeSlot key={i} event={getEventOnDay(i)} />

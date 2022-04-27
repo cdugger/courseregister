@@ -14,13 +14,13 @@ const DeleteScheduleModal = (props) => {
                 <Modal.Title>Delete Schedule Confirmation</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p>Are you sure you would like to delete {props.scheduleName}?</p>
+                <p>Are you sure you would like to delete <strong>{props.scheduleName}</strong>?</p>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={props.hide}>
                     No
                 </Button>
-                <Button variant="primary" onClick={handleConfirm}>
+                <Button variant="danger" onClick={handleConfirm}>
                     Yes
                 </Button>
             </Modal.Footer>

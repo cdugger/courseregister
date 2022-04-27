@@ -58,7 +58,7 @@ const WeekView = (props) => {
     }
 
     return (
-        <Container>
+        <Container id="week-view">
             <Row className="text-white" style={{"backgroundColor": "#212121", "opacity": ".85"}}>
                 <Col className="d-flex justify-content-end">
                     <Button className="m-1" variant="outline-info" size="lg" onClick={prevWeek}><i className="bi bi-caret-left"></i></Button>

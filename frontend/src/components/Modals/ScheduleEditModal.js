@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
@@ -7,11 +7,23 @@ import Form from 'react-bootstrap/Form';
 
 const ScheduleEditModal = (props) => {
     const [inputValue, setInputValue] = useState("");
+    const editInput = useRef(null);
 
     const handleConfirm = () => {
         props.onConfirm(inputValue)
         props.hide();
     }
+
+    const handleEnter = (e) => {
+        if(e.key === "Enter") {
+            e.preventDefault();
+            handleConfirm();
+        }
+    }
+
+    useEffect(() => {
+        editInput.current.focus();
+    }, [])
 
     return (
         <Modal show={props.show} onHide={props.hide}>
@@ -19,17 +31,17 @@ const ScheduleEditModal = (props) => {
                 <Modal.Title>Edit schedule name</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p>Editing {props.scheduleName}</p>
+                <p>Editing <strong>{props.scheduleName}</strong></p>
                 <FloatingLabel controlId="floatingTextarea" label="Name" className="mb-3">
-                    <Form.Control as="textarea" placeholder="" value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
+                    <Form.Control ref={editInput} type="email" placeholder="" value={inputValue} onChange={(e) => setInputValue(e.target.value)} onKeyUp={handleEnter} />
                 </FloatingLabel>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={props.hide}>
-                    No
+                    Cancel
                 </Button>
                 <Button variant="primary" onClick={handleConfirm}>
-                    Yes
+                    Confirm
                 </Button>
             </Modal.Footer>
         </Modal>

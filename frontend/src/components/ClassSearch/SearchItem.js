@@ -27,7 +27,7 @@ const SearchItem = (props) => {
                 <Row>
                     <Col>
                         <Row><p><strong>CRN</strong></p></Row>
-                        <Row><p>{2001}</p></Row>
+                        <Row><p>{props.courseInfo.crn}</p></Row>
                     </Col>
                     <Col>
                         <Row><p><strong>Meeting Times</strong></p></Row>

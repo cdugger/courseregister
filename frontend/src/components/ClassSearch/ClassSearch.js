@@ -4,6 +4,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import ClassSearchAddModal from '../Modals/ClassSearchAddModal';
 import SearchItem from './SearchItem';
@@ -137,12 +138,13 @@ const ClassSearch = (props) => {
     return (
         <>
             {/* <MoveToTop /> */}
-            <ClassSearchAddModal show={showAddModal} hide={() => setShowAddModal(false)} course={selectedCourseInfo} onConfirm={addCourse}/>
+            <ClassSearchAddModal show={showAddModal} hide={() => setShowAddModal(false)} course={selectedCourseInfo} onConfirm={addCourse} />
             <Modal show={props.show} onHide={props.hide} size="xl" id="class-search">
                 <Modal.Header closeButton>
-                    <Modal.Title>Add/Search Course</Modal.Title>
+                    <Modal.Title>Add/Search Courses</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+
                     {/*
                         Subject Select
                     */}
@@ -156,6 +158,9 @@ const ClassSearch = (props) => {
                         <label htmlFor="subject-datalist">Subject</label>
                         <div className="invalid-feedback">Required Field</div>
                     </Form.Floating>
+                    {/* <Form>
+                        <Form.Control type="text" placeholder="Search for instructor, CRN, or title" />
+                    </Form> */}
                     {/*
                         Attribute Select
                     */}
@@ -198,6 +203,12 @@ const ClassSearch = (props) => {
                     <hr />
                 </Modal.Body>
                 <Modal.Body>
+                    {props.message ?
+                        <Alert variant={props.message.success ? "success" : "danger"}>{props.message.text}</Alert>
+                        :
+                        <></>
+                    }
+
                     <p>Courses found: {filteredCourseList ? filteredCourseList.length : 0}</p>
                     {(filteredCourseList && !loading) ? filteredCourseList.map((course, i) => (
                         <SearchItem key={i} courseInfo={course} subject={subject} code={code} onCourseAdd={handleCourseAdd} />

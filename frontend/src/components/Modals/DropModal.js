@@ -10,7 +10,7 @@ const DropModal = (props) => {
             </Modal.Header>
 
             <Modal.Body>
-                <p>Are you sure you want to drop {props.course.title}?</p>
+                <p>Are you sure you want to drop <strong>{props.course.name.subject}-{props.course.name.number} {props.course.name.title}</strong>?</p>
             </Modal.Body>
 
             <Modal.Footer>

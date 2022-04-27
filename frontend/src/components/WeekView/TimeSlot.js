@@ -6,7 +6,7 @@ const TimeSlot = (props) => {
         <Col className="border" style={{ "position": "relative" }}>
             {
                 props.event.length > 0 ?
-                    <><Row className='event'><p className="text-white fs-7">{props.event[0].number + " " + props.event[0].title}</p></Row><Row></Row></>
+                    <><Row className='event'><p className="text-white fs-6">{props.event[0].subject}-{props.event[0].number} {props.event[0].title}</p></Row><Row></Row></>
                     : <><Row style={{"color": "white"}}><p>.</p></Row><Row style={{"color": "white"}}><p>.</p></Row></>
             }
         </Col>

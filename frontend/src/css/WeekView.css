@@ -13,13 +13,19 @@
 .event {
     position: absolute;
     left: 20px;
-    height: 50px;
+    height: 100px;
     width: 90%;
     font-size: 12px;
     background-color: rgb(255, 0, 0, .75);
     border-left: 5px solid red;
+    z-index: 100;
 }
 
 .event:hover {
     background-color: red;
+}
+
+#week-view {
+    height: 75vh;
+    overflow: scroll;
 }

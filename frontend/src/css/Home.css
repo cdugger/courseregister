@@ -1,0 +1,14 @@
+body {
+    background-color:rgba(107, 161, 184, .25);
+}
+
+#content {
+    background-color: white;
+    min-height: 100vh;
+    height: 100%;
+}
+
+#schedule-view {
+    background-color: white !important;
+    color: black;
+}

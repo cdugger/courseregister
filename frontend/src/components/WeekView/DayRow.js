@@ -7,18 +7,28 @@ const DayRow = (props) => {
         let result = [];
         let curr_date = new Date(props.start_date.valueOf());
         for (let i = 0; i < days.length; i++) {
-            result.push(curr_date.getDate());
-            curr_date.setDate(curr_date.getDate() + 1);
+            result.push(curr_date);
+            let temp_date = new Date(curr_date);
+            temp_date.setDate(temp_date.getDate() + 1);
+            curr_date = temp_date;
         }
 
         return result;
+    }
+
+    const isTodaysDate = (date) => {
+        const todaysDate = new Date();
+        return todaysDate.getMonth() === date.getMonth() && todaysDate.getDate() === date.getDate() && todaysDate.getYear() === date.getYear();
     }
 
     return (
         <Row>
             <Col md={1}></Col>
             {dates().map((d, i) => (
-                <Col key={i} className="fs-5 border"><p><strong>{d + " "}</strong>{days[i]}</p></Col>
+                <Col key={i} className="fs-5 border" style={isTodaysDate(d) ? {"backgroundColor": "#198754", "color": "white"}: {}}>
+                    
+                    <p><strong>{d.getDate() + " "}</strong>{days[i]}</p>
+                </Col>
             ))}
         </Row>
 
