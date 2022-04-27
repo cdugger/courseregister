@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Spinner from 'react-bootstrap/Spinner';
 import Form from 'react-bootstrap/Form';
@@ -10,6 +10,7 @@ import ClassSearchAddModal from '../Modals/ClassSearchAddModal';
 import SearchItem from './SearchItem';
 import courses from '../../data/courses';
 import { subject_data, attributes, components } from '../../data/course_filters';
+import MoveToTop from './MoveToTop';
 
 
 const ClassSearch = (props) => {
@@ -23,6 +24,7 @@ const ClassSearch = (props) => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [selectedUnits, setSelectedUnits] = useState(0);
     const [selectedUnitsLabel, setSelectedUnitsLabel] = useState(0); // Only used for the label showing the selected # of units.
+    const modalElem = useRef(null);
 
     const filterBySubject = (e) => {
         let subject_find = subject_data.find((x) => {
@@ -78,6 +80,9 @@ const ClassSearch = (props) => {
     }
 
     useEffect(() => {
+        // document.getElementsByClassName('modal')[0].scrollTop = 0;
+        console.log(modalElem);
+
         const applyFilters = () => {
             let modifiedCourseList = [...courseList];
             const filters = [applyDayFilter, applyUnitFilter];
@@ -139,7 +144,7 @@ const ClassSearch = (props) => {
         <>
             {/* <MoveToTop /> */}
             <ClassSearchAddModal show={showAddModal} hide={() => setShowAddModal(false)} course={selectedCourseInfo} onConfirm={addCourse} />
-            <Modal show={props.show} onHide={props.hide} size="xl" id="class-search">
+            <Modal ref={modalElem} show={props.show} onHide={props.hide} size="xl" id="class-search">
                 <Modal.Header closeButton>
                     <Modal.Title>Add/Search Courses</Modal.Title>
                 </Modal.Header>
@@ -204,7 +209,10 @@ const ClassSearch = (props) => {
                 </Modal.Body>
                 <Modal.Body>
                     {props.message ?
-                        <Alert variant={props.message.success ? "success" : "danger"}>{props.message.text}</Alert>
+                        <div className="sticky-top">
+                            <Alert variant={props.message.success ? "success" : "danger"}>{props.message.text}</Alert>
+                        </div>
+
                         :
                         <></>
                     }
@@ -223,7 +231,11 @@ const ClassSearch = (props) => {
                     }
                 </Modal.Body>
                 <Modal.Footer>
-
+                    {
+                        modalElem.current ? <MoveToTop element={modalElem.current.dialog}></MoveToTop>
+                        : <></>
+                    }
+                    
                     {/* <Button variant="secondary">Close</Button>
                 <Button variant="primary">Save changes</Button> */}
                 </Modal.Footer>

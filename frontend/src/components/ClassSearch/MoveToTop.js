@@ -1,15 +1,42 @@
+import { useEffect, useState } from 'react';
 import '../../css/MoveToTop.css'
+import Button from 'react-bootstrap/Button';
 
-const MoveToTop = () => {
+const MoveToTop = (props) => {
+    const [show, setShow] = useState(false);
 
-    const topFunction = (e) => {
-        console.log(document.body.scrollTop);
-        document.body.scrollTop = 0;
-        document.documentElement.scrollTop = 0;
+    const scrollToTop = () => {
+        props.element.scrollTo({ top: 0, 'behavior': 'smooth' });
     }
 
+    const handleScroll = () => {
+        if (props.element.scrollTop > 300) {
+            setShow(true)
+        } else {
+            setShow(false);
+        }
+    }
+
+    useEffect(() => {
+        props.element.addEventListener("scroll", handleScroll);
+
+        return () => {
+            props.element.removeEventListener("scroll", handleScroll);
+        }
+    }, []);
+
     return (
-        <button onclick={topFunction} id="scrollTop" title="Go to top">Top</button>
+        <div className="fixed-bottom text-center">
+            {show ?
+                <Button variant="primary" onClick={scrollToTop}>
+                    <i className="bi bi-arrow-bar-up fs-2"></i>
+                </Button>
+                :
+                <></>
+            }
+
+        </div>
+
     );
 }
 
