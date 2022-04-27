@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -12,12 +12,13 @@ import NewScheduleModal from './Modals/NewScheduleModal';
 import DeleteScheduleModal from './Modals/DeleteScheduleModal';
 import CourseList from './CourseList/CourseList';
 import WeekView from './WeekView/WeekView';
+import notFound from '../images/no-classes.jpg'
 
 const Home = () => {
     const [showCourseAdd, setShowCourseAdd] = useState(false);
     const [showDrop, setShowDrop] = useState(false);
     const [view, setView] = useState('list');
-    const [addedCourses, setAddedCourses] = useState([]);
+    // const [addedCourses, setAddedCourses] = useState([]);
     const [droppedCourse, setDroppedCourse] = useState({});
     const listIcon = "bi-card-list";
     const calendarIcon = "bi-calendar";
@@ -38,6 +39,9 @@ const Home = () => {
     }
 
     const handleDeleteScheduleModal = () => {
+        if(!schedule[selectedSchedule]) {
+            return;
+        }
         setDeleteScheduleModalShow(true);
     }
 
@@ -45,10 +49,14 @@ const Home = () => {
         let temp = [...schedule];
         temp.push({name: name, courses: []});
         setSchedule(temp);
-        setSelectedSchedule(selectedSchedule + 1);
+        setSelectedSchedule(temp.length - 1);
     }
 
     const deleteSchedule = () => {
+        // Prevent the main schedule from being deleted
+        if(schedule.length === 1 || selectedSchedule == 0) {
+            return;
+        }
         let temp = [...schedule];
         temp.splice(selectedSchedule, 1);
         setSchedule(temp);
@@ -56,20 +64,19 @@ const Home = () => {
     }
 
     const editScheduleName = (name) => {
-        console.log(`Editing schedule ${schedule[selectedSchedule].name} to '${name}'`);
         let temp = [...schedule];
         temp[selectedSchedule].name = name;
         setSchedule(temp);
     }
 
-    const handleSelectSchedule = (e, i) => {
+    const handleSelectSchedule = (i) => {
         setSelectedSchedule(i);
     }
 
     const dropCourse = () => {
-        let temp = [...addedCourses];
-        temp.splice(droppedCourse.id, 1);
-        setAddedCourses(temp);
+        let temp = [...schedule];
+        temp[selectedSchedule].courses.splice(droppedCourse.id, 1);
+        setSchedule(temp);
         setShowDrop(false);
     }
 
@@ -82,17 +89,21 @@ const Home = () => {
     }
 
     const addCourse = (course) => {
-        let temp = [...addedCourses];
-        temp.push(course);
-        setAddedCourses(temp);
+        let temp = [...schedule];
+        temp[selectedSchedule].courses.push(course);
+        setSchedule(temp);
     }
+
+    useEffect(() => {
+        console.log(schedule);
+    }, [schedule])
 
     return (
         <Container>
             
-            <DeleteScheduleModal show={deleteScheduleModalShow} hide={() => setDeleteScheduleModalShow(false)} scheduleName={schedule[selectedSchedule].name} onConfirm={deleteSchedule} />
+            <DeleteScheduleModal show={deleteScheduleModalShow} hide={() => setDeleteScheduleModalShow(false)} scheduleName={schedule[selectedSchedule] ? schedule[selectedSchedule].name: ""} onConfirm={deleteSchedule} />
             <NewScheduleModal show={newScheduleModalShow} hide={() => setNewScheduleModalShow(false)} onConfirm={addNewSchedule} />
-            <ScheduleEditModal show={scheduleEditModalShow} hide={() => setScheduleEditModalShow(false)} scheduleName={schedule[selectedSchedule].name} onConfirm={editScheduleName} /> 
+            <ScheduleEditModal show={scheduleEditModalShow} hide={() => setScheduleEditModalShow(false)} scheduleName={schedule[selectedSchedule] ? schedule[selectedSchedule].name: ""} onConfirm={editScheduleName} /> 
             <DropModal show={showDrop} hide={() => setShowDrop(false)} course={droppedCourse} onConfirm={dropCourse} />
           
             <h2 className="display-5 py-5">Schedule Builder</h2>
@@ -105,10 +116,10 @@ const Home = () => {
                 </Row>
                 <Row>
                     <Col>
-                        <Form.Select aria-label="Default select example">
+                        <Form.Select aria-label="Default select example" onChange={(e) => handleSelectSchedule(e.target.value)}>
                             {
                                 schedule.map((s, i) => (
-                                    <option key={i} onClick={() => handleSelectSchedule(s.name, i)} selected={selectedSchedule === i}>{s.name}</option>
+                                    <option key={i} value={i} selected={selectedSchedule === i}>{s.name}</option>
                                 ))
                             }
                             
@@ -127,12 +138,10 @@ const Home = () => {
                         <Dropdown>
                             <Dropdown.Toggle id="schedule-view">
                                 <i className={view === 'list' ? listIcon : calendarIcon} style={{ fontSize: "2rem", color: "white" }}></i>
-                                {/* {view === 'list' ? " List" : " Calendar"} */}
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
                                 <Dropdown.Item onClick={toggleScheduleView}>
                                     <i className={view === 'list' ? calendarIcon : listIcon} style={{ fontSize: "2rem", color: "cornflowerblue" }}></i>
-                                    {/* {view === 'list' ? " Calendar" : " List"} */}
                                 </Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
@@ -144,11 +153,15 @@ const Home = () => {
                 </Row>
             </Row>
             {view === 'list' ?
-                addedCourses.length > 0 ?
-                    <CourseList courses={addedCourses} onDrop={showDropCourseModal} />
+                schedule[selectedSchedule].courses.length > 0 ?
+                    <CourseList courses={ schedule[selectedSchedule].courses} onDrop={showDropCourseModal} />
                     :
-                    <p>No classes added</p>
-                : <WeekView courses={addedCourses} />}
+                    <>
+                        <p>No classes added to this schedule</p>
+                        <span><small class="text-muted"> Click the <b>Search/Add Course</b> button to start adding classes</small></span>
+                    </>
+      
+                : <WeekView courses={ schedule[selectedSchedule].courses} />}
             {
                 showCourseAdd ? <ClassSearch show={showCourseAdd} hide={() => setShowCourseAdd(false)} onCourseAdd={addCourse} /> : <></>
             }

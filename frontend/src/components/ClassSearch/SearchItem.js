@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -6,10 +7,14 @@ import Badge from 'react-bootstrap/Badge';
 import { formatTime } from '../../util/util';
 
 const SearchItem = (props) => {
+    const [details, setDetails] = useState(false);
 
     const handleCourseAdd = () => {
-        console.log(props.courseInfo);
         props.onCourseAdd(props.courseInfo);
+    }
+
+    const handleShowDetails = () => {
+        setDetails(details ? false : true);
     }
 
     return (
@@ -58,11 +63,22 @@ const SearchItem = (props) => {
                     </Col>
                     <Col>
                         <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <Button variant="secondary">Details</Button>{' '}
+                            <Button variant="secondary" onClick={handleShowDetails}>{details ? "Hide" : "Details"}</Button>{' '}
                             <Button variant="success" onClick={handleCourseAdd}>Add</Button>{' '}
                         </div>
                     </Col>
                 </Row>
+                {
+                    details ?
+                        <>
+                            <hr />
+                            <Row>
+                                <p>{props.courseInfo.description}</p>
+                            </Row>
+                        </>
+                        : <></>
+                }
+
             </ListGroup.Item>
         </ListGroup>
     );
