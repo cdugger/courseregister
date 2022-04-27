@@ -1,7 +1,7 @@
 import json
 import re
 from string import ascii_uppercase
-from random import choice
+from random import choice, sample
 import requests
 from bs4 import BeautifulSoup
 
@@ -20,6 +20,7 @@ def main():
         soup = BeautifulSoup(f, "html.parser")
 
     last_names = get_names("last-names.txt")
+    crns = sample(range(0, 10000), 10000)
     course_catalog = []
     meta = []
     subjects = soup.find_all("li")
@@ -30,7 +31,7 @@ def main():
         subject_data = {
             "subject": subject_name,
             "code": subject_code,
-            "courses": get_courses(subject.a["href"], last_names),
+            "courses": get_courses(subject.a["href"], subject_code, last_names, crns),
         }
         course_catalog.append(subject_data)
         meta.append({"subject": subject_name, "code": subject_code})
@@ -61,7 +62,7 @@ Match Prereqs: (P,[^.]+)
 """
 
 
-def get_courses(href, last_names):
+def get_courses(href, subject_code, last_names, crns):
     result = []
     try:
         r = requests.get(href)
@@ -75,10 +76,12 @@ def get_courses(href, last_names):
                 time_info = create_meeting_dates()
                 result.append(
                     {
+                        "subject": subject_code,
                         "title": clean_text(
                             p.b.getText()[p.b.getText().find(" ") + 1 :]
                         ),
                         "number": number,
+                        "crn": choice(crns),
                         "description": desc,
                         "instructor": create_instructor(last_names),
                         "days": time_info["days"],
