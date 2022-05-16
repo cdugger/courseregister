@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/courseregister/static/css/main.48feddce.css",
-    "main.js": "/courseregister/static/js/main.fc6d1d17.js",
+    "main.js": "/courseregister/static/js/main.43f8b411.js",
     "static/media/background-sm.jpg": "/courseregister/static/media/background-sm.9fa72854fce1bc9191c8.jpg",
     "index.html": "/courseregister/index.html",
     "main.48feddce.css.map": "/courseregister/static/css/main.48feddce.css.map",
-    "main.fc6d1d17.js.map": "/courseregister/static/js/main.fc6d1d17.js.map"
+    "main.43f8b411.js.map": "/courseregister/static/js/main.43f8b411.js.map"
   },
   "entrypoints": [
     "static/css/main.48feddce.css",
-    "static/js/main.fc6d1d17.js"
+    "static/js/main.43f8b411.js"
   ]
 }
