@@ -1,4 +1,7 @@
-# Course Register
-https://cdugger.github.io/courseregister/
-![image](https://user-images.githubusercontent.com/8763846/167928159-07f85225-d57c-49f6-92df-938eaabf8056.png)
-![image](https://user-images.githubusercontent.com/8763846/167928257-3508faeb-cc75-472c-8969-f1cdeb52026a.png)
+# Course Schedule Builder
+A mock university course schedule builder using data sourced from the University of Arizona https://archive.catalog.arizona.edu/faculty/courses/984/courses.html
+
+Built with React. Webscraping done in Python.
+
+## Deployment: https://cdugger.github.io/courseregister/
+![Animation](https://user-images.githubusercontent.com/8763846/168676948-a961b3ca-a058-4239-b5fe-316df2b45c55.gif)
