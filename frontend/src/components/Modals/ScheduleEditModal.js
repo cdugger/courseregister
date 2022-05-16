@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 
 
 const ScheduleEditModal = (props) => {
-    const [inputValue, setInputValue] = useState("");
+    const [inputValue, setInputValue] = useState(props.scheduleName);
     const editInput = useRef(null);
 
     const handleConfirm = () => {
